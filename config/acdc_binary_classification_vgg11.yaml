@@ -1,0 +1,5 @@
+pos_samps_train: /media/dontgetdown/model_partition/medical_imaging_datasets/acdc/mr_train_plus/
+pos_samps_val: /media/dontgetdown/model_partition/medical_imaging_datasets/acdc/mr_train_plus/
+neg_samps_train: /media/dontgetdown/model_partition/medical_imaging_datasets/acdc/mr_train_minus/
+neg_samps_val: /media/dontgetdown/model_partition/medical_imaging_datasets/acdc/mr_train_minus/
+model: vgg11
