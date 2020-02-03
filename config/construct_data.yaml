@@ -1,0 +1,8 @@
+sample_file: dataset/mr_train_1002_image.nii.gz
+sample_folder: /media/dontgetdown/model_partition/medical_imaging_datasets/acdc/mr_train_original
+dataset_name: ACDC
+create_gif: False
+show: False
+save_neg: /media/dontgetdown/model_partition/medical_imaging_datasets/acdc/mr_train_minus/
+save_pos: /media/dontgetdown/model_partition/medical_imaging_datasets/acdc/mr_train_plus/
+sigmas: [1.0]

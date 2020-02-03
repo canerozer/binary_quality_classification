@@ -5,7 +5,6 @@ import tqdm
 
 import numpy as np
 import nibabel as nib
-from nibabel.spatialimages import SpatialImage
 
 import matplotlib.pyplot as plt
 
@@ -73,7 +72,7 @@ def corrupt(kspace, sigma=1.0):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='nii.gz-1 visualizer')
     parser.add_argument('--yaml_path', type=str, metavar='YAML',
-                        default="config/test.yaml",
+                        default="config/construct_data.yaml",
                         help='Enter the path for the YAML config')
     args = parser.parse_args()
 
@@ -87,16 +86,13 @@ if __name__ == "__main__":
     content = sorted(list(filter(lambda x: "image" in x, content)))
     files = [os.path.join(data_args["sample_folder"], x) for x in content]
 
-
     for sigma in data_args["sigmas"]:
         for img_name, img_file in tqdm.tqdm(zip(content, files)):
             proxy_img = nib.load(img_file)
             img = proxy_img.get_fdata()
-
             kspace = transform_image_to_kspace(img)
 
             kspace_prime = corrupt(kspace, sigma=sigma)
-
             recon_img_prime = transform_kspace_to_image(kspace_prime).astype("float64")
 
             if data_args["show"]:
@@ -113,12 +109,13 @@ if __name__ == "__main__":
                 fig.canvas.mpl_connect('scroll_event', tracker.onscroll)
                 plt.show()
 
-            target_path = img_name[:-4]+"_sigma"+str(sigma)+img_name[-7:]
-            affine = proxy_img.affine
-            print(affine)
-            proxy_recon_img_prime = nib.Nifti1Image(recon_img_prime, affine)
-            nib.save(proxy_recon_img_prime,
-                     os.path.join(data_args["save_to"], target_path),
-                    )
+            for frame_nr in range(img.shape[2]):
+                target_path_neg = img_name[:-4] + "_sigma" + str(sigma) +\
+                                  "_" + str(frame_nr)
+                target_path_pos = img_name[:-4] + "_" + str(frame_nr)
+                np.save(os.path.join(data_args["save_neg"], target_path_neg),
+                        recon_img_prime[:, :, frame_nr])
+                np.save(os.path.join(data_args["save_pos"], target_path_pos),
+                        img[:, :, frame_nr])
 
 
