@@ -4,7 +4,8 @@ Code retrieved from https://github.com/ismrmrd/ismrmrd-python-tools
 import numpy as np
 from numpy.fft import fftshift, ifftshift, fftn, ifftn
 
-def transform_kspace_to_image(k, dim=None, img_shape=None):
+def transform_kspace_to_image(k: np.array, dim: int=None,
+                              img_shape: tuple=None) -> np.array:
     """ Computes the Fourier transform from k-space to image space
     along a given or all dimensions
     :param k: k-space data
@@ -21,7 +22,8 @@ def transform_kspace_to_image(k, dim=None, img_shape=None):
     return img
 
 
-def transform_image_to_kspace(img, dim=None, k_shape=None):
+def transform_image_to_kspace(img: np.array, dim: int=None,
+                              k_shape: tuple=None) -> np.array:
     """ Computes the Fourier transform from image space to k-space space
     along a given or all dimensions
     :param img: image space data
