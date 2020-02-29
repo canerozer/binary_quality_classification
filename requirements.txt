@@ -1,0 +1,6 @@
+pyyaml
+scikit-image
+argparse
+nibabel
+tqdm
+pandas

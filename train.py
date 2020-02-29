@@ -31,77 +31,8 @@ from dataset import ACDCDataset, Resize, ToTensor, Normalize,\
 import matplotlib.pyplot as plt
 
 
-# def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
-#     since = time.time()
-
-#     best_model_wts = copy.deepcopy(model.state_dict())
-#     best_acc = 0.0
-
-#     for epoch in range(num_epochs):
-#         print('Epoch {}/{}'.format(epoch, num_epochs - 1))
-#         print('-' * 10)
-
-#         # Each epoch has a training and validation phase
-#         for phase in ['train', 'val']:
-#             if phase == 'train':
-#                 model.train()  # Set model to training mode
-#             else:
-#                 model.eval()   # Set model to evaluate mode
-#                 #model.train()   # Set model to training mode
-
-#             running_loss = 0.0
-#             running_corrects = 0
-
-#             # Iterate over data.
-#             for inputs, labels in dataloader[phase]:
-#                 inputs = inputs.to(device)
-#                 labels = labels.to(device)
-
-#                 # zero the parameter gradients
-#                 optimizer.zero_grad()
-
-#                 # forward
-#                 # track history if only in train
-#                 with torch.set_grad_enabled(phase == 'train'):
-#                     outputs = model(inputs)
-#                     _, preds = torch.max(outputs, 1)
-#                     loss = criterion(outputs, labels)
-
-#                     # backward + optimize only if in training phase
-#                     if phase == 'train':
-#                         loss.backward()
-#                         optimizer.step()
-
-#                 # statistics
-#                 running_loss += loss.item() * inputs.size(0)
-#                 running_corrects += torch.sum(preds == labels.data)
-#             if phase == 'train':
-#                 scheduler.step()
-
-#             epoch_loss = running_loss / dataset_sizes[phase]
-#             epoch_acc = running_corrects.double() / dataset_sizes[phase]
-
-#             print('{} Loss: {:.4f} Acc: {:.4f}'.format(
-#                 phase, epoch_loss, epoch_acc))
-
-#             # deep copy the model
-#             if phase == 'val' and epoch_acc > best_acc:
-#                 best_acc = epoch_acc
-#                 best_model_wts = copy.deepcopy(model.state_dict())
-
-#         print()
-
-#     time_elapsed = time.time() - since
-#     print('Training complete in {:.0f}m {:.0f}s'.format(
-#         time_elapsed // 60, time_elapsed % 60))
-#     print('Best val Acc: {:4f}'.format(best_acc))
-
-#     # load best model weights
-#     model.load_state_dict(best_model_wts)
-#     return model
-
-
-def train(model, criterion, optimizer, scheduler=None, num_epochs=25, test_every=1):
+def train(model, criterion, optimizer, scheduler=None, num_epochs=25,
+          test_every=1, save_every=3):
     iter_epochs = range(num_epochs)
 
     if train_args["retrieve_last_model"]:
@@ -152,13 +83,18 @@ def train(model, criterion, optimizer, scheduler=None, num_epochs=25, test_every
         if scheduler:
             scheduler.step()
 
-        
-        state = {'epoch': epoch, 'model': model.state_dict(),
-                 'optimizer': optimizer.state_dict(),
-                 'scheduler': scheduler.state_dict()}
-        torch.save(state,
-                   train_args["model_save_dir"] + train_args["model"] +\
-                   "_ep" + str(epoch) + ".pth")
+        if epoch % save_every == 0: 
+            if scheduler:
+                state = {'epoch': epoch, 'model': model.state_dict(),
+                         'optimizer': optimizer.state_dict(),
+                         'scheduler': scheduler.state_dict()}
+            else:
+                state = {'epoch': epoch, 'model': model.state_dict(),
+                         'optimizer': optimizer.state_dict()}
+
+            torch.save(state,
+                       train_args["model_save_dir"] + train_args["model"] +\
+                       "_ep" + str(epoch) + ".pth")
 
     time_elapsed = time.time() - since
     print('Training complete in {:.0f}m {:.0f}s'.format(
@@ -224,6 +160,8 @@ if __name__ == "__main__":
     with open(yaml_path, 'r') as f:
         train_args = yaml.safe_load(f)
 
+    os.makedirs(train_args["model_save_dir"], exist_ok=True)
+
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     composed = transforms.Compose([Resize((224, 224)),
@@ -236,13 +174,6 @@ if __name__ == "__main__":
                                   train_args["neg_samps_"+x],
                                   transform=composed)
                    for x in ["train", "val", "test"]}
-
-    # class_sample_counts = {x: acdc_dataset[x].get_sample_counts()
-    #                        for x in ["train", "val", "test"]}
-    # weights = {x: 1 / torch.Tensor(class_sample_counts[x]).double()
-    #            for x in ["train", "val", "test"]}
-    # sampler = {x: WeightedRandomSampler(weights[x], train_args["batch_size"])
-    #            for x in ["train", "val", "test"]}
 
     dataloader = {x: DataLoader(acdc_dataset[x],
                                 batch_size=train_args["batch_size"],
@@ -263,7 +194,7 @@ if __name__ == "__main__":
     #exp_lr_scheduler = lr_scheduler.StepLR(optimizer_ft, step_size=10, gamma=0.1)
 
     model_ft = train(model_ft, criterion, optimizer_ft, #exp_lr_scheduler,
-                     num_epochs=30)
+                     num_epochs=train_args["epoch"])
 
     test(model_ft, dataloader["test"], dataset_sizes["test"])
 

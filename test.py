@@ -11,7 +11,7 @@ from torch.utils.data import Dataset, DataLoader
 from dataset import ACDCDataset, Resize, ToTensor, Normalize,\
                     OneToThreeDimension
 from models.models import get_model
-from utils.utils import get_most_recent_state
+from utils.utils import get_most_recent_model
 
 
 def test(model, test_set, dataset_size, device=None):
@@ -64,11 +64,11 @@ def main():
 
     model_ft = get_model(train_args["model"], device,
                          pretrained=train_args["pretrained"])
-    state = get_most_recent_state(train_args["model"],
+    state = get_most_recent_model(train_args["model"],
                                   train_args["model_save_dir"])
     model_ft.load_state_dict(state)
 
-    summary(model_ft, (3, 224, 224))
+    #summary(model_ft, (3, 224, 224)) # Use this to get the number of params
     test(model_ft, dataloader, dataset_size, device=device)
     
 
