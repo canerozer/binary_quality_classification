@@ -1,0 +1,29 @@
+SPLIT:
+    train:
+        value: 0.7
+        plus: 1.0
+        minus: 1.0
+    val:
+        value: 0.2
+        plus: 1.0
+        minus: 1.0
+    test:
+        value: 0.1
+        plus: 1.0
+        minus: 1.0
+
+src: /home/rsltgy/Documents/caner/datasets/acdc/official_training
+meta_fn: Info.cfg
+
+neg_path: /home/rsltgy/Documents/caner/datasets/acdc/uniform/mr_minus/
+pos_path: /home/rsltgy/Documents/caner/datasets/acdc/uniform/mr_plus/
+
+cor_idxes: [0.40, 0.20, 0.15, 0.10, 0.05, 0.03, 0.01]
+
+TARGET:
+    train_plus: /home/rsltgy/Documents/caner/datasets/acdc/uniform/mr_train_plus/
+    train_minus: /home/rsltgy/Documents/caner/datasets/acdc/uniform/mr_train_minus/
+    val_plus: /home/rsltgy/Documents/caner/datasets/acdc/uniform/mr_val_plus/
+    val_minus: /home/rsltgy/Documents/caner/datasets/acdc/uniform/mr_val_minus/
+    test_plus: /home/rsltgy/Documents/caner/datasets/acdc/uniform/mr_test_plus/
+    test_minus: /home/rsltgy/Documents/caner/datasets/acdc/uniform/mr_test_minus/

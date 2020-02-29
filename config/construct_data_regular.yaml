@@ -9,9 +9,9 @@ show_kspace: False
 
 sigmas: [1.]
 cor_idxes: [0.40, 0.20, 0.15, 0.10, 0.05, 0.03, 0.01]
-sampling_type: uniform
+sampling_type: regular
 
 save: True
-save_neg: /home/rsltgy/Documents/caner/datasets/acdc/uniform/mr_minus/
-save_pos: /home/rsltgy/Documents/caner/datasets/acdc/uniform/mr_plus/
+save_neg: /home/rsltgy/Documents/caner/datasets/acdc/regular/mr_minus/
+save_pos: /home/rsltgy/Documents/caner/datasets/acdc/regular/mr_plus/
 
