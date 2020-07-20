@@ -1,0 +1,31 @@
+# Sample YAML configuration file for splitting data into train, validation and test sets by using the original ACDC class labels. The program will perform the split by creating symbolic links to the .npy files.
+
+SPLIT:
+    train:
+        value: 0.7  # 70% of patients
+        plus: 1.0   # Take first 100% of the patients as good quality samples
+        minus: 1.0  # Take last 100% of the patients as poor quality samples
+    val:
+        value: 0.2  # 20% of patients
+        plus: 1.0
+        minus: 1.0
+    test:
+        value: 0.1  # 10% of patients
+        plus: 1.0
+        minus: 1.0
+
+src: /path/to/dataset/  # the dataset should contain folders with nii.gz files inside them
+meta_fn: Info.cfg       # Info.cfg will be used for distributing the samples within 3 sets evenly
+
+neg_path: /path/to/cor_samp/
+pos_path: /path/to/uncor_samp/
+
+cor_idxes: [0.40, 0.20, 0.15, 0.10, 0.05, 0.03, 0.01]
+
+TARGET:
+    train_plus: /path/to/structured_dataset/uncor_samp_train/
+    train_minus: /path/to/structured_dataset/cor_samp_train/
+    val_plus: /path/to/structured_dataset/uncor_samp_val/
+    val_minus: /path/to/structured_dataset/cor_samp_val/
+    test_plus: /path/to/structured_dataset/uncor_samp_test/
+    test_minus: /path/to/structured_dataset/cor_samp_test/

@@ -1,0 +1,18 @@
+# Sample YAML configuration file for generating motion artefacts and saving image slices.
+ 
+dataset_name: ACDC  
+src: /path/to/dataset/ # the dataset should contain folders with nii.gz files inside them
+format: .nii.gz # default file format of the dataset
+process_ones_with: _4d # Only process the NiFTI files with "_4d" suffix 
+
+show_image: False   # show corrupted image during corruption generation 
+show_kspace: False  # show k-space representation of the image during corruption generation
+
+sigmas: [1.]            # sigma value of the gaussian line sampler
+cor_idxes: [0.40, 0.20, 0.15, 0.10, 0.05, 0.03, 0.01] #more indexes can be added
+sampling_type: uniform  # [uniform, regular], uniform is used throughout the experiments
+
+save: True                          # saving image slices
+save_neg: /path/to/cor_samp/        # path to ones with corruption
+save_pos: /path/to/uncor_samp/      # path to ones without corruption
+stats: uniform_mse_ssim.csv         # saving the MSE and SSIM stats regarding the corrupted samples

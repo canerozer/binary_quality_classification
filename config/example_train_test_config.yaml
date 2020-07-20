@@ -1,0 +1,20 @@
+root_dir: &ROOT /path/to/structured_dataset/
+cor_rate: &COR 0.15 # Pre-defined corruption ratio
+cor_rate_primes: [0.01, 0.03, 0.05, 0.1, 0.15, 0.2, 0.4] # Which corruption rates to test the interclass motion artefact detection performance
+
+pos_samps_train: !join [*ROOT, uncor_samp_train/, *COR, /]
+pos_samps_val: !join [*ROOT, uncor_samp_val/, *COR, /]
+pos_samps_test: !join [*ROOT, uncor_samp_test/, *COR, /]
+neg_samps_train: !join [*ROOT, cor_samp_train/, *COR, /]
+neg_samps_val: !join [*ROOT, cor_samp_val/, *COR, /]
+neg_samps_test: !join [*ROOT, cor_samp_test/, *COR, /]
+
+loss_name: cross_entropy # [cross_entropy, focal_loss]
+model: resnet50 # [resnet18, resnet34, resnet50, resnet101]
+pretrained: True
+batch_size: 128
+epoch: 10
+
+model_save_dir: /path/to/model/ # used for saving and loading model_state_dict
+save_only_last_model: True # saving the model at the final epoch
+retrieve_last_model: False # loading the last created model after restarting training
