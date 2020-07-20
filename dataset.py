@@ -8,7 +8,6 @@ import torchvision
 from torchvision import transforms, utils
 
 
-
 class ACDCDataset(Dataset):
     def __init__(self, plus_path, minus_path, transform=None,
                  mean=None, std=None):
