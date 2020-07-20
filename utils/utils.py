@@ -7,6 +7,7 @@ from matplotlib.widgets import Slider
 
 import torch
 
+
 def list_subfolders(root: str) -> list:
     """
     Lists all the files given a root folder.
@@ -102,9 +103,17 @@ def get_most_recent_model(model_name: str, model_locs: str) -> dict:
     return state["model"]
 
 
-class Sampler:
-    def __init__(self):
-        pass
+def yaml_var_concat(loader, node):
+    seq = loader.construct_sequence(node)
+    return ''.join([str(i) for i in seq])
+
+
+class DictAsMember(dict):
+    def __getattr__(self, name):
+        value = self[name]
+        if isinstance(value, dict):
+            value = DictAsMember(value)
+        return value
 
 
 if __name__ == "__main__":
