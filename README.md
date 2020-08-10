@@ -11,6 +11,7 @@ This repository aims to provide the necessary implementations and guidelines for
 Before proceeding with the guideline, it is necessary to install the required Python packages by typing 
 `pip install -r requirements.txt -f https://download.pytorch.org/whl/torch_stable.html` and installing PyTorch v1.5.1 with GPU support. This code is tested under Python 3.7 Miniconda. 
 
+In order to run the codeblocks of `saliency_visualization.ipynb` file, it is necessary to download a pre-trained model file and install a couple packages with `sh requirements_visualize.sh` command. It may also be necessary to install `node.js` and run `jupyter labextension install @jupyter-widgets/jupyterlab-manager` in order to use the interact panel of the `ipywidget` library on Jupyter Lab. 
 
 ACDC Dataset is required as a prerequisite for reproducing these experiments. Although it is originally presented as CMR patient records in terms of NifTi files, patient records will be stored as `.npy` files which contain individual image slices. We will also generate corrupted image slices and split the data based on the original class IDs provided in the dataset. For example, the dataset file hierarchy will have such a form for a single corruption ratio of 0.15:
 
@@ -97,3 +98,22 @@ The dataset was split into 70% for model training, 20% for model validation and 
 | 0.20 | 0.658 | 0.776 | 0.880 | 0.970 | 0.971 | 0.972 | 0.972 |
 | 0.40 | 0.665 | 0.695 | 0.759 | 0.923 | 0.976 | 0.990 | 0.993 |
 
+# Citation
+
+If you use code for your research, please cite the corresponding papers.
+
+```
+@inproceedings{Oksuz2018a
+    title = {Cardiac {MR} Motion Artefact Correction from K-space Using Deep Learning-Based Reconstruction},
+    author = {Ilkay {\"{O}}ks{\"{u}}z and James R. Clough and Aur{\'{e}}lien Bustin and Gastao Cruz and Claudia Prieto and Ren{\'{e}} M. Botnar and Daniel Rueckert and Julia A. Schnabel and Andrew P. King},
+    booktitle = {Machine Learning for Medical Image Reconstruction - First International Workshop, {MLMIR} 2018, Held in Conjunction with {MICCAI} 2018}
+    year = {2018}
+}
+
+@inproceedings{Oksuz2018b
+    title = {Deep Learning Using K-Space Based Data Augmentation for Automated Cardiac {MR} Motion Artefact Detection},
+    author = {Ilkay {\"{O}}ks{\"{u}}z and Bram Ruijsink and Esther Puyol{-}Ant{\'{o}}n and Aur{\'{e}}lien Bustin and Gastao Cruz and Claudia Prieto and Daniel Rueckert and Julia A. Schnabel and Andrew P. King},
+    booktitle = {Medical Image Computing and Computer Assisted Intervention - {MICCAI} 2018 - 21st International Conference}
+    year = {2018}
+}
+```
