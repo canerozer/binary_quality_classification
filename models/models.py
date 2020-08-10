@@ -24,6 +24,9 @@ def get_model(model_name, device, dtype=torch.float32, pretrained=False,
     elif model_name == "vgg11":
         model_ft = models.vgg11(pretrained=pretrained)
         model_ft.classifier[6] = nn.Linear(4096, n_classes, bias=True)
+    elif model_name == "alexnet":
+        model_ft = models.alexnet(pretrained=pretrained)
+        model_ft.classifier[6] = nn.Linear(4096, n_classes)
 
     model_ft = model_ft.to(dtype).to(device)
     return model_ft
